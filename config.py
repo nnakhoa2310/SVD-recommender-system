@@ -189,8 +189,7 @@ def expander_html():
         """
     <p style='text-align: justify; font-size: 1rem; font-weight: 400; padding: 0px; margin: 0px 0px 1rem;'>Select a movie from the dropdown menu and rate it on a scale from 1 to 5. Add at least 10 movies to your list, finally hit 'Recommend' below.
     </p>
-    <p style='text-align: justify; font-size: 1rem; font-weight: 400; padding: 0px; margin: 0px 0px 1rem;'>Created By Attila Orosz. More info on <a href="https://github.com/orosz-attila/Movie-Recommender" target="_blank">Github</a>.
-    </p>
+    
     """, 
     unsafe_allow_html=True,
     )
