@@ -98,19 +98,18 @@ movies_list = fn.get_movies_list(df_merged)
 
 # permanent sidebar elements
 with st.sidebar:
-    title = st.title('REFLUX')
-    header1 = st.header('The Movie Recommender') 
+    title = st.title('SVD Recommender system')
     with st.expander("How to use it?"):
         cf.expander_html()
     form = st.form(key="movie_selector", clear_on_submit=True)
     movie_select = form.selectbox('Select / type in a movie title', options=movies_list, index=0)
-    rating_select = form.selectbox('Rate this movie ( 5 = best )', ['', 1, 2, 3, 4, 5], index=0)
+    rating_select = form.selectbox('Rate this movie', ['', 1, 2, 3, 4, 5], index=0)
     add_movie = form.form_submit_button('Add movie')
 
 
-#if add_movie form_submit_button is clicked on 
+#if add_movie form_submit_button is clicked on
 if add_movie:
-    if not movie_select: 
+    if not movie_select:
         cf.background(st.session_state.url)
         st.success('Oops, you did not select a movie!')
         with st.sidebar:
@@ -123,7 +122,7 @@ if add_movie:
                 with col1:
                     st.button("Delete last entry", key='4', on_click=set_delete)
                 with col2:
-                    st.button('Recommend', key="1", on_click=set_recommend)       
+                    st.button('Recommend', key="1", on_click=set_recommend)
         st.stop()
     elif not rating_select:
         cf.background(st.session_state.url)
@@ -138,14 +137,14 @@ if add_movie:
                 with col1:
                     st.button("Delete last entry", key='4', on_click=set_delete)
                 with col2:
-                    st.button('Recommend', key="1", on_click=set_recommend)   
+                    st.button('Recommend', key="1", on_click=set_recommend)
         st.stop()
     elif movie_select and rating_select:
         st.session_state.url = cf.random_gif()
         cf.background(st.session_state.url)
         st.session_state.df_user = fn.insert_input(st.session_state.df_user, movie_select, rating_select)
         with st.sidebar:
-            st.write("List of your rated movies:") 
+            st.write("List of your rated movies:")
             user_ratings = st.dataframe(st.session_state.df_user)
             col1, col2 = st.columns(2)
             with col1:
@@ -160,23 +159,23 @@ if st.session_state.delete == 1:
         st.success("Oops, your list is empty!")
         st.session_state.delete = 0
         with st.sidebar:
-            st.write("List of your rated movies:") 
+            st.write("List of your rated movies:")
             user_ratings = st.dataframe(st.session_state.df_user)
             col1, col2 = st.columns(2)
             with col1:
                 st.button("Delete last entry", key='4', on_click=set_delete)
             with col2:
                 st.button('Recommend', key="1", on_click=set_recommend)
-    else:            
+    else:
         cf.background(st.session_state.url)
         st.session_state.delete = 0
         st.session_state.df_user = fn.remove_last(st.session_state.df_user)
         with st.sidebar:
-            st.write("List of your rated movies:") 
+            st.write("List of your rated movies:")
             user_ratings = st.dataframe(st.session_state.df_user)
             col1, col2 = st.columns(2)
             with col1:
-                st.button("Delete last entry", key='4', on_click=set_delete) 
+                st.button("Delete last entry", key='4', on_click=set_delete)
             with col2:
                 st.button('Recommend', key="1", on_click=set_recommend)
         with st.spinner('Last entry deleted!'):
@@ -191,34 +190,34 @@ if st.session_state.recommend == 1:
         st.success("Oops, your list is empty!")
         st.session_state.recommend = 0
         with st.sidebar:
-            st.write("List of your rated movies:") 
+            st.write("List of your rated movies:")
             user_ratings = st.dataframe(st.session_state.df_user)
             col1, col2 = st.columns(2)
             with col1:
                 st.button("Delete last entry", key='4', on_click=set_delete)
             with col2:
                 st.button('Recommend', key="1", on_click=set_recommend)
-    else: 
+    else:
         st.session_state.url = 'https://64.media.tumblr.com/tumblr_lf89wxB3ja1qe0eclo1_r34_500.gifv'
         cf.background(st.session_state.url)
         st.session_state.recommend = 0
         st.session_state.df_user['rating'] = st.session_state.df_user['rating'].astype(int)
-        with st.spinner('Please wait, your recommendations are in the oven!'):   
+        with st.spinner('Please wait, your recommendations are in the oven!'):
             df_recommended = fn.svd_recommender(st.session_state.df_user, df_merged)
         with st.sidebar:
-            st.write("Recommended movies for you:") 
+            st.write("Recommended movies for you:")
             recommendations = st.dataframe(df_recommended)
             col1, col2 = st.columns(2)
-            with col1: 
-                st.button('Add more movies', key=2, on_click=set_add_more) 
+            with col1:
+                st.button('Add more movies', key=2, on_click=set_add_more)
             with col2:
-                st.button("Restart", key=3, on_click=set_restart) 
-        with st.spinner('Ready! Check your recommendations!'): 
+                st.button("Restart", key=3, on_click=set_restart)
+        with st.spinner('Ready! Check your recommendations!'):
             time.sleep(2)
         time.sleep(10)
         st.success("Hit 'Add more movies' to continue or 'Restart' to erase your list")
 else:
-    pass 
+    pass
 
 
 # if 'Add_more_movies' button is clicked on
@@ -227,22 +226,23 @@ if st.session_state.add_more == 1:
     cf.background(st.session_state.url)
     st.session_state.add_more = 0
     with st.sidebar:
-        st.write("List of your rated movies:") 
+        st.write("List of your rated movies:")
         user_ratings = st.dataframe(st.session_state.df_user)
         col1, col2 = st.columns(2)
         with col1:
-            st.button("Delete last entry", key='4', on_click=set_delete) 
+            st.button("Delete last entry", key='4', on_click=set_delete)
         with col2:
             st.button('Recommend', key="1", on_click=set_recommend)
 else:
-    pass 
+    pass
 
 
 # if 'Restart' button is clicked on
 if st.session_state.restart == 1:
-    st.session_state.url = 'https://64.media.tumblr.com/38ad849338d5e1eeecfd1880b0497514/tumblr_mh6d6nDLrR1qe0eclo1_r6_500.gifv' 
+    st.session_state.url = 'https://64.media.tumblr.com/38ad849338d5e1eeecfd1880b0497514/tumblr_mh6d6nDLrR1qe0eclo1_r6_500.gifv'
     cf.background(st.session_state.url)
     st.session_state.restart = 0
     st.session_state.df_user = pd.DataFrame(columns = ['title', 'rating'])
 else:
-    pass 
+    pass
+1
