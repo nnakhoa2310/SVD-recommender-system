@@ -124,14 +124,6 @@ def svd_recommender(df_user, df_merged):
         recommendations_svd.append((title, algo_svd.predict(uid=611,iid=title).est))
     df_recommendation = pd.DataFrame(recommendations_svd, columns=['title', 'predictions']).sort_values('predictions', ascending=False)
 
-
-    # match % set to index, 
-    df_recommendation.rename(columns={'predictions': 'match (%)'}, inplace=True)
-    df_recommendation['match (%)'] = df_recommendation['match (%)'] * 20
-    df_recommendation['match (%)'] = df_recommendation['match (%)'].astype(int)
-    df_recommendation['match (%)'] = df_recommendation['match (%)'].astype(str) + ' %'
-    df_recommendation.set_index('match (%)', inplace=True)
-
     return df_recommendation
 
 if __name__ == "__main__":
